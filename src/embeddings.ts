@@ -6,6 +6,7 @@ import { Chroma } from "@langchain/community/vectorstores/chroma";
 
 const VAULT_PATH = process.env.VAULT_PATH || '/Users/rami/Documents/Obsidian';
 
+
 /**
  * Load all markdown notes from your vault folder.
  * Adjust the file extension filter if necessary.
