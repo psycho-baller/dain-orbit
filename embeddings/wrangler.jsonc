@@ -13,7 +13,7 @@
 	"vectorize": [
 		{
 			"binding": "VECTORIZE",
-			"index_name": "embeddings"
+			"index_name": "orbit-profiles"
 		}
 	],
 	"ai": {
