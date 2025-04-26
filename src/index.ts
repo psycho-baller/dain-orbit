@@ -4,6 +4,7 @@ import { CardUIBuilder, DainResponse, TableUIBuilder } from "@dainprotocol/utils
 import fs from 'fs/promises';
 import path from "path";
 import dotenv from "dotenv";
+import { searchUsersConfig } from "./linkd";
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
 
@@ -139,7 +140,7 @@ const dainService = defineDAINService({
   identity: {
     apiKey: process.env.DAIN_API_KEY,
   },
-  tools: [listFilesConfig, readFileConfig],
+  tools: [listFilesConfig, readFileConfig, searchUsersConfig],
 });
 
 dainService.startNode({ port: 2023 }).then(() => {
