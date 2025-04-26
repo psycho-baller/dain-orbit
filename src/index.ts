@@ -5,6 +5,8 @@ import fs from 'fs/promises';
 import path from "path";
 import dotenv from "dotenv";
 import { searchUsersConfig } from "./linkd";
+import { generateEmbeddingsConfig } from "./cloudflare";
+import { findEmailConfig } from "./find-email";
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
 
@@ -140,7 +142,7 @@ const dainService = defineDAINService({
   identity: {
     apiKey: process.env.DAIN_API_KEY,
   },
-  tools: [listFilesConfig, readFileConfig, searchUsersConfig],
+  tools: [listFilesConfig, readFileConfig, searchUsersConfig, generateEmbeddingsConfig, findEmailConfig],
 });
 
 dainService.startNode({ port: 2023 }).then(() => {
