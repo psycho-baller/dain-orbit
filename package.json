@@ -18,6 +18,7 @@
     "@langchain/openai": "^0.4.4",
     "@types/express": "^4.17.13",
     "@types/node": "^22.5.4",
+    "@vapi-ai/web": "^2.2.7",
     "axios": "^1.7.5",
     "chromadb": "^1.10.4",
     "dotenv": "^16.4.7",
