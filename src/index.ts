@@ -8,6 +8,7 @@ import { searchUsersConfig } from "./linkd";
 import { generateEmbeddingsConfig } from "./cloudflare";
 import { findEmailConfig } from "./find-email";
 import { phoneCallConfig } from "./call-vapi";
+import { initialContext } from "./prompts";
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
 
@@ -132,20 +133,51 @@ async function listFilesRecursively(dir: string): Promise<Array<{ name: string; 
   return files.flat();
 }
 
+const firstMessageConfig: ToolConfig = {
+  id: "first-message",
+  name: "First Message",
+  description: `Hi! Welcome to Orbit. This service is created to help you find the perfect match—whether that's a mentor, mentee, or accountability partner. To get started, I need to learn about your goals and what you're passionate about.
+
+We can jump in a short call and in just a few quick questions, we'll build your profile so we can start building your orbit full of people who can really help you grow, and who you can help too. If you're ready to get started, drop your phone number in the chat!
+`,
+  input: z.object({}),  // No input required for this tool
+  output: z.object({
+    message: z.string()
+  }),
+  handler: async (input, agentInfo) => {
+    const welcomeMessage = `Hi! Welcome to Orbit. This service is created to help you find the perfect match—whether that's a mentor, mentee, or accountability partner. To get started, I need to learn about your goals and what you're passionate about.
+
+We can jump in a short call and in just a few quick questions, we'll build your profile so we can start building your orbit full of people who can really help you grow, and who you can help too. If you're ready to get started, drop your phone number in the chat!
+`;
+
+    const cardUI = new CardUIBuilder()
+      .title("Welcome!")
+      .content(welcomeMessage)
+      .build();
+
+    return {
+      text: welcomeMessage,
+      data: { message: welcomeMessage },
+      ui: cardUI
+    };
+  }
+};
+
 const dainService = defineDAINService({
   metadata: {
-    title: "Obsidian Integration Service",
-    description: "A service to interact with your Obsidian vault",
+    title: "Orbit Service",
+    description: "A service to help you find the perfect match—whether that's a mentor, mentee, or accountability partner.",
     version: "1.0.0",
-    author: "Your Name",
+    author: "Rami Maalouf",
     tags: []
   },
   identity: {
     apiKey: process.env.DAIN_API_KEY,
   },
   tools: [listFilesConfig, readFileConfig, searchUsersConfig, generateEmbeddingsConfig, findEmailConfig, phoneCallConfig],
+  contexts: [initialContext],
 });
 
 dainService.startNode({ port: 2023 }).then(() => {
-  console.log("Obsidian Integration Service is running on port 2023");
+  console.log("Orbit Service is running on port 2023");
 });
