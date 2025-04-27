@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ToolConfig } from "@dainprotocol/service-sdk";
 import { CardUIBuilder } from "@dainprotocol/utils";
+import { findEmail } from "./utils";
 
 export const findEmailConfig: ToolConfig = {
   id: "find-email",
@@ -13,46 +14,17 @@ export const findEmailConfig: ToolConfig = {
     email: z.string().describe("Email address of the user"),
   }),
   handler: async ({ username }, agentInfo) => {
-    const url = 'https://magicloops.dev/api/loop/a436e267-305e-4cd6-8594-85406f8fe090/run';
+    const email = findEmail();
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username }),
-      });
+    const cardUI = new CardUIBuilder()
+      .title("Email Found")
+      .content(`Selected email for ${username}: ${email}`)
+      .build();
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const responseJson = await response.json();
-
-      const cardUI = new CardUIBuilder()
-        .title("Magic Loops API Response")
-        .content(JSON.stringify(responseJson, null, 2))
-        .build();
-
-      return {
-        text: "Successfully called Magic Loops API",
-        data: { email: responseJson.email },
-        ui: cardUI,
-      };
-    } catch (error) {
-      console.error("Error calling Magic Loops API:", error);
-
-      const errorCardUI = new CardUIBuilder()
-        .title("Error")
-        .content(`Failed to call Magic Loops API: ${error.message}`)
-        .build();
-
-      return {
-        text: "Error occurred while calling Magic Loops API",
-        data: { response: null },
-        ui: errorCardUI,
-      };
-    }
+    return {
+      text: `Email found for ${username}: ${email}`,
+      data: { email },
+      ui: cardUI,
+    };
   },
 };

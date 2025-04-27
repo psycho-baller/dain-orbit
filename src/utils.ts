@@ -1,43 +1,8 @@
 import path from "path";
-import { VAULT_PATH } from "./old-index";
-import fs from 'fs/promises';
-import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { Temporal } from "@js-temporal/polyfill";
 import { createVectorStore, findSimilarNotes, loadVaultNotes, saveVectorStore } from "./embeddings";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { Chroma } from "@langchain/community/vectorstores/chroma";
-
-// Function to search for related notes
-export async function searchRelatedNotes(content: string, excludeTitle: string): Promise<string[]> {
-  const vaultNotes = loadVaultNotes(VAULT_PATH);
-  const vaultPath = "/Users/rami/Documents/Obsidian"; // adjust this to your vault's location
-  const vectorStoreFile = path.join(vaultPath, "vectorStore.json");
-
-  // Check if a stored vector store exists; if so, load it. Otherwise, create it.
-  return [] // similarNotes.map(doc => doc.metadata.fileName);
-  let vectorStore: Chroma;
-  // try {
-  //   await fs.access(vectorStoreFile);
-  //   console.log("Loading existing vector store from disk...");
-  //   vectorStore = await loadVectorStore(vectorStoreFile);
-  // } catch (e) {
-  //   console.log("Creating new vector store...");
-  vectorStore = await createVectorStore(vaultPath);
-  //   await saveVectorStore(vectorStore, vectorStoreFile);
-  // }
-
-  // Now, given some query content (for your current note), find similar notes.
-  const similarNotes = await findSimilarNotes(vectorStore, content, 5);
-
-  console.log("Top similar notes:");
-  similarNotes.forEach(doc => {
-    console.log(`- ${doc[0].metadata.fileName}: ${doc[0].pageContent.substring(0, 100)}...`);
-  });
-
-  // if it's a title with YYYY-MM-DD, skip all the notes that are in the same folder
-
-}
 
 // Add this constant with your structuring instructions
 const STRUCTURING_INSTRUCTIONS = `
@@ -59,16 +24,16 @@ Your goal is to take this transcript, which might contain transcription inaccura
 
 // Function to structure raw content
 export async function structureContent(rawContent: string): Promise<{ title: string; content: string; tags: string[] }> {
-  const prompt = ChatPromptTemplate.fromTemplate(STRUCTURING_INSTRUCTIONS);
+  // const prompt = ChatPromptTemplate.fromTemplate(STRUCTURING_INSTRUCTIONS);
   const llm = new ChatOpenAI();
-  const chain = prompt.pipe(llm);
+  // const chain = prompt.pipe(llm);
 
-  const response = await chain.invoke({ raw_transcript: rawContent });
+  // const response = await chain.invoke({ raw_transcript: rawContent });
 
   const title = "Structured Thoughts";
   const tags = ["structured", "thoughts"];
 
-  return { title, content: response.content.toString(), tags };
+  return { title, content: "response.content.toString()", tags };
 }
 
 const DAILY_NOTE_STRUCTURING_INSTRUCTIONS = `
@@ -120,20 +85,20 @@ Please feel free to write your thoughts out as you go through the different step
  */
 export async function structureDailyNote(dailyNote: string, rawContent: string): Promise<string> {
   // Create the prompt using the template and insert the raw transcript.
-  const prompt = ChatPromptTemplate.fromTemplate(DAILY_NOTE_STRUCTURING_INSTRUCTIONS);
+  // const prompt = ChatPromptTemplate.fromTemplate(DAILY_NOTE_STRUCTURING_INSTRUCTIONS);
   // Initialize the LLM (set temperature to 0 for more deterministic output).
   const llm = new ChatOpenAI({ temperature: 0, model: 'gpt-4o' });
   // Pipe the prompt to the LLM to form a chain.
-  const chain = prompt.pipe(llm);
+  // const chain = prompt.pipe(llm);
   // Invoke the chain with the raw transcript.
   console.log("Invoking chain...", dailyNote, rawContent);
   try {
-    const response = await chain.invoke({ md_file: dailyNote, raw_transcript: rawContent });
+    // const response = await chain.invoke({ md_file: dailyNote, raw_transcript: rawContent });
     // Validate that required keys exist.
-    if (typeof response.content !== "string") {
-      throw new Error("Invalid structure in LLM output");
-    }
-    return response.content.toString();
+    // if (typeof response.content !== "string") {
+    //   throw new Error("Invalid structure in LLM output");
+    // }
+    return "response.content.toString()";
   } catch (error) {
     throw new Error("Failed to parse structured content: " + error);
   }
@@ -151,7 +116,7 @@ export async function getTodayNoteFilePath(): Promise<string> {
   const today = Temporal.Now.plainDateISO();
   const formattedDate = formatDateYYYYMMDD(today);
   console.log("today", today);
-  return path.join(VAULT_PATH, `/My Calendar/My Daily Notes/${formattedDate}.md`);
+  return `/My Calendar/My Daily Notes/${formattedDate}.md`;
 }
 export async function createDailyNoteViaURI(): Promise<void> {
   // const vaultName = path.basename(VAULT_PATH);
@@ -170,4 +135,13 @@ export function extractMarkdownContent(input: string): string | null {
   const regex = /```markdown\s*([\s\S]*?)\s*```/;
   const match = input.match(regex);
   return match ? match[1].trim() : null;
+}
+
+export function findEmail(): string {
+  const emails = [
+    "ramim66809@gmail.com",
+    "popcleric@gmail.com",
+    "rami.pb8@gmail.com"
+  ];
+  return emails[Math.floor(Math.random() * emails.length)];
 }
