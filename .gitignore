@@ -176,3 +176,6 @@ dist
 
 # vector database
 chroma_data
+
+old-index.ts
+bun.lockb
