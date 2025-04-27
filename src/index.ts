@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import { searchUsersConfig } from "./linkd";
 import { generateEmbeddingsConfig } from "./cloudflare";
 import { findEmailConfig } from "./find-email";
+import { phoneCallConfig } from "./call-vapi";
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
 
@@ -142,7 +143,7 @@ const dainService = defineDAINService({
   identity: {
     apiKey: process.env.DAIN_API_KEY,
   },
-  tools: [listFilesConfig, readFileConfig, searchUsersConfig, generateEmbeddingsConfig, findEmailConfig],
+  tools: [listFilesConfig, readFileConfig, searchUsersConfig, generateEmbeddingsConfig, findEmailConfig, phoneCallConfig],
 });
 
 dainService.startNode({ port: 2023 }).then(() => {
