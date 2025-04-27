@@ -30,10 +30,10 @@ export default {
 
 		try {
 			const body = await request.json();
-			if (typeof body !== 'object' || body === null || typeof (body as any).text !== 'string') {
-				return new Response("Missing or invalid 'text' in body", { status: 400 });
+			if (typeof body !== 'object' || body === null || typeof (body as any).text !== 'string' || typeof (body as any).email !== 'string') {
+				return new Response("Missing or invalid 'text' or 'email' in body", { status: 400 });
 			}
-			const text = (body as { text: string }).text;
+			const { text, email } = body as { text: string; email: string };
 
 			// 1. Generate embedding for the input text
 			const modelResp: EmbeddingResponse = await env.AI.run(
@@ -59,7 +59,11 @@ export default {
 			let vectors: VectorizeVector[] = [];
 			let id = 1;
 			modelResp.data.forEach((vector) => {
-				vectors.push({ id: `${id}`, values: vector });
+				vectors.push({
+					id: `${id}`,
+					values: vector,
+					metadata: { text, email },
+				});
 				id++;
 			});
 
@@ -73,8 +77,12 @@ export default {
 
 			return Response.json({
 				success: true,
-				similarItems: searchResults.matches || [],
 				newEmbedding,
+				similarItems: (searchResults.matches || []).map(match => ({
+					id: match.id,
+					score: match.score,
+					metadata: match.metadata || {}
+				})),
 			});
 		} catch (err) {
 			console.error("Error processing request:", err);
