@@ -18,6 +18,7 @@ interface EmbeddingResponse {
 	shape: number[];
 	data: number[][];
 }
+
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		let path = new URL(request.url).pathname;
@@ -56,18 +57,25 @@ export default {
 			// Each vector needs an ID, a value (the vector) and optional metadata.
 			// In a real application, your ID would be bound to the ID of the source
 			// document.
+			// 1. Get the current number of vectors in the database
+			const allVectors = (await env.VECTORIZE); // or .count() if available
+			const initialId = (await allVectors.describe()).vectorCount; // or .count if that's available
+
+			// 2. Assign incremental IDs
+			let idCounter = initialId;
 			let vectors: VectorizeVector[] = [];
-			let id = 1;
 			modelResp.data.forEach((vector) => {
 				vectors.push({
-					id: `${id}`,
+					id: idCounter.toString(),
 					values: vector,
 					metadata: { text, email },
 				});
-				id++;
+				idCounter++;
 			});
+			console.log("Inserted vector IDs:", vectors.map(v => v.id));
 
 			const inserted = await env.VECTORIZE.upsert(vectors);
+			console.log("Inserted vector IDs:", inserted.mutationId);
 			// return Response.json(inserted);
 			// 3. Search for 10 most similar items (excluding the one just added)
 			const searchResults = await env.VECTORIZE.query(newEmbedding, {
