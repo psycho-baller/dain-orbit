@@ -6,23 +6,29 @@ import {
   ServiceContext
 } from "@dainprotocol/service-sdk";
 import { CardUIBuilder, AlertUIBuilder, DainResponse } from "@dainprotocol/utils";
-
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
 async function makePhoneCall(phoneNumber: string, message: string): Promise<string> {
   const VAPI_API_KEY = process.env.VAPI_API_KEY;    // Your Vapi API key
   const ASSISTANT_ID = process.env.VAPI_ASSISTANT_ID;    // Your persistent assistant ID
+  const VAPI_PHONE_NUMBER_ID = process.env.VAPI_PHONE_NUMBER_ID;    // Your phone number ID
 
-  if (!VAPI_API_KEY || !ASSISTANT_ID) {
+  if (!VAPI_API_KEY || !ASSISTANT_ID || !VAPI_PHONE_NUMBER_ID) {
+    console.error('Missing Vapi configuration in environment variables.');
     throw new Error('Missing Vapi configuration in environment variables.');
   }
 
   // Initialize the Vapi server client
   const client = new VapiClient({ token: VAPI_API_KEY });
+  console.log("Vapi client initialized", client);
 
   try {
     // Start an outbound phone call with the assistant
     const response = await client.calls.create({
       assistantId: ASSISTANT_ID,
       customer: { number: phoneNumber },
+      phoneNumberId: VAPI_PHONE_NUMBER_ID,
       // firstMessage: message,
       // firstMessageMode: "assistant-speaks-first"
     });
@@ -68,17 +74,17 @@ export const phoneCallConfig: ToolConfig = {
     // Start the call in the background
     (async () => {
       try {
-        // await app.processes.addUpdate(processId, {
-        //   percentage: 25,
-        //   text: "Initiating call..."
-        // });
-
+        await app.processes.addUpdate(processId, {
+          percentage: 25,
+          text: "Initiating call..."
+        });
+        console.log("Initiating call...");
         const result = await makePhoneCall(phoneNumber, "Hey, I'm Jamie. Your AI friend. Let's get straight into it. Tell me about yourself. What do you enjoy working on? What are you working on right now? What area of your life are you looking to improve?");
-
-        // await app.processes.addUpdate(processId, {
-        //   percentage: 75,
-        //   text: "Call completed, processing result..."
-        // });
+        console.log("Call completed, processing result...", result);
+        await app.processes.addUpdate(processId, {
+          percentage: 75,
+          text: "Call completed, processing result... " + result
+        });
 
         // Add the final result
         await app.processes.addResult(processId, {
@@ -91,6 +97,7 @@ export const phoneCallConfig: ToolConfig = {
         });
       } catch (error) {
         await app.processes!.failProcess(processId, error.message);
+        console.error("Error making phone call:", error);
       }
     })();
     console.log("Phone call initiated");
