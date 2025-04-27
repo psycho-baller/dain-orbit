@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   ToolConfig,
 } from "@dainprotocol/service-sdk";
-import { CardUIBuilder } from "@dainprotocol/utils";
+import { CardUIBuilder, DataGridUIBuilder, TableUIBuilder } from "@dainprotocol/utils";
 
 // -- primitive metadata value --
 const VectorizeVectorMetadataValue = z.union([
@@ -45,7 +45,6 @@ const VectorizeMatchSchema = z
 
 // Type derived from the Zod schema for a match result
 export type VectorizeMatch = z.infer<typeof VectorizeMatchSchema>;
-
 export const generateEmbeddingsConfig: ToolConfig = {
   id: "generate-embeddings",
   name: "Generate Embeddings",
@@ -54,7 +53,6 @@ export const generateEmbeddingsConfig: ToolConfig = {
     text: z.string().describe("User profile details in markdown format"),
     email: z.string().describe("The current user's email address"),
   }),
-  // VectorizeMatch
   output: z.array(VectorizeMatchSchema),
   handler: async ({ text, email }) => {
     try {
@@ -67,21 +65,38 @@ export const generateEmbeddingsConfig: ToolConfig = {
       const matches = response.data.similarItems as VectorizeMatch[];
       console.log("matches", matches);
 
-      const cardUI = new CardUIBuilder()
-        .title("Embeddings Generated")
-        .content(`Found ${matches.length} users that might match well with you. Here are the details:
-          ${matches
-            .map(
-              (match) =>
-                `Email: ${match.metadata?.email} Score: ${match.score}`
-            )
-            .join("\n")}`)
+      const tableUI = new DataGridUIBuilder()
+        .addColumns([
+          { field: "score", header: "Match Score" },
+          { field: "text", header: "Profile Details" },
+          { field: "recipientEmail", header: "Recipient Email" },
+          { field: "senderEmail", header: "Sender Email" },
+        ])
+        .rows(matches.map(match => ({
+          score: match.score.toFixed(2),
+          text: match.metadata?.text as string,
+          recipientEmail: match.metadata?.email as string,
+          senderEmail: email
+        })))
+        .onRowClick({
+          tool: "draft-email",
+          paramSchema: {
+            recipientEmail: { type: "string" },
+            senderEmail: { type: "string" },
+          },
+          params: {
+            recipientEmail: "rami.pb8@gmail.com",
+            senderEmail: "ramim66809@gmail.com",
+          },
+          type: "callTool",
+          key: "draft-email",
+          shouldCallLLMAfterTool: true
+        })
         .build();
-
       return {
         text: `Successfully generated embeddings for the user profile`,
         data: matches,
-        ui: cardUI,
+        ui: tableUI,
       } as { text: string; data: VectorizeMatch[]; ui: unknown }
     } catch (error) {
       console.error("Error generating embeddings:", error);

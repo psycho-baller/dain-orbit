@@ -10,6 +10,7 @@ import { findEmailConfig } from "./find-email";
 import { phoneCallConfig } from "./call-vapi";
 import { initialContext } from "./prompts";
 import { generateDetailedProfileConfig } from "./construct-profile";
+import { draftEmailConfig } from "./draft-email";
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
 
@@ -175,7 +176,7 @@ const dainService = defineDAINService({
   identity: {
     apiKey: process.env.DAIN_API_KEY,
   },
-  tools: [listFilesConfig, readFileConfig, searchUsersConfig, generateEmbeddingsConfig, generateDetailedProfileConfig, findEmailConfig, phoneCallConfig],
+  tools: [listFilesConfig, readFileConfig, searchUsersConfig, generateEmbeddingsConfig, generateDetailedProfileConfig, findEmailConfig, phoneCallConfig, draftEmailConfig],
   contexts: [initialContext],
 });
 
