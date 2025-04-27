@@ -44,19 +44,7 @@ export default {
 
 			const newEmbedding = modelResp.data[0]; // Assuming it's like [{ embedding: [...] }]
 
-			// 2. Add the embedding to the vector DB
-			// const id = crypto.randomUUID(); // or any unique ID
-			// await env.VECTORIZE.upsert([
-			// 	{
-			// 		id,
-			// 		values: newEmbedding,
-			// 		metadata: { text },
-			// 	},
-			// ]);
-			// Convert the vector embeddings into a format Vectorize can accept.
-			// Each vector needs an ID, a value (the vector) and optional metadata.
-			// In a real application, your ID would be bound to the ID of the source
-			// document.
+
 			// 1. Get the current number of vectors in the database
 			const allVectors = (await env.VECTORIZE); // or .count() if available
 			const initialId = (await allVectors.describe()).vectorCount; // or .count if that's available

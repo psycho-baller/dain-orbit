@@ -13,12 +13,8 @@ const VectorizeVectorMetadataValue = z.union([
   z.array(z.string()),
 ]);
 
-// -- recursive metadata map --
-const VectorizeVectorMetadata: z.ZodType<
-  Record<string, unknown>
-> = z.lazy(() =>
-  z.record(VectorizeVectorMetadataValue)
-);
+// -- metadata map --
+const VectorizeVectorMetadata = z.record(VectorizeVectorMetadataValue);
 
 // -- the base VectorizeVector schema --
 const VectorizeVectorSchema = z.object({
@@ -32,7 +28,7 @@ const VectorizeVectorSchema = z.object({
   namespace: z.string().optional(),
 
   /** Metadata associated with the vector. */
-  metadata: z.record(VectorizeVectorMetadata).optional(),
+  metadata: VectorizeVectorMetadata.optional(),
 });
 
 // -- build VectorizeMatch by omitting `values`, re-adding it as optional, and adding `score` --
@@ -53,21 +49,23 @@ export type VectorizeMatch = z.infer<typeof VectorizeMatchSchema>;
 export const generateEmbeddingsConfig: ToolConfig = {
   id: "generate-embeddings",
   name: "Generate Embeddings",
-  description: "Generate embeddings from user profile details after generating the profile based on the call",
+  description: "Generate embeddings from user profile details after generating the profile based on the call. Invoke this tool after we have created the user's profile.",
   input: z.object({
     text: z.string().describe("User profile details in markdown format"),
+    email: z.string().describe("The current user's email address"),
   }),
   // VectorizeMatch
   output: z.array(VectorizeMatchSchema),
-  handler: async ({ text }, agentInfo) => {
+  handler: async ({ text, email }) => {
     try {
       const response = await axios.post(
         "https://embeddings.ramim66809.workers.dev/",
-        { text, email: agentInfo.address },
+        { text, email },
         { headers: { "Content-Type": "application/json" } }
       );
 
       const matches = response.data.similarItems as VectorizeMatch[];
+      console.log("matches", matches);
 
       const cardUI = new CardUIBuilder()
         .title("Embeddings Generated")
@@ -75,7 +73,7 @@ export const generateEmbeddingsConfig: ToolConfig = {
           ${matches
             .map(
               (match) =>
-                `Name: ${match.metadata?.name}, Email: ${match.metadata?.email}`
+                `Email: ${match.metadata?.email} Score: ${match.score}`
             )
             .join("\n")}`)
         .build();

@@ -64,6 +64,7 @@ export async function loadVaultNotes(vaultPath: string): Promise<Document[]> {
                             totalChunks: chunks.length
                         };
                     });
+                    // @ts-ignore
                     docs.push(...chunks);
                 }
             }
@@ -120,11 +121,14 @@ export async function createVectorStore(vaultPath: string): Promise<Chroma> {
     }) || []);
 
     // Filter out documents that are already in the store
+    // @ts-ignore
     const newDocs = docs.filter(doc => !existingFileNames.has(doc.metadata.fileName));
 
     if (newDocs.length > 0) {
         console.log(`Adding ${newDocs.length} new documents to vector store...`);
+        // @ts-ignore
         await vectorStore.addDocuments(newDocs, {
+            // @ts-ignore
             ids: newDocs.map(doc => `${doc.metadata.fileName}_${doc.metadata.chunkIndex}`)
         });
     } else {
