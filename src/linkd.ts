@@ -15,7 +15,7 @@ const API_BASE_URL = 'https://search.linkd.inc/api';
 export const searchUsersConfig: ToolConfig = {
   id: "search-users",
   name: "Search Users",
-  description: "Search for users based on query and optional school filter. We should provide it with a detailed description of who we are looking for. This will then return a list of users matching the query.",
+  description: "Search for users based on query and optional school filter. We should provide it with a detailed description of who we are looking for. This will then return a list of users matching the query. Invoke this tool after we have ended our phone call with the assistant.",
   input: z.object({
     query: z.string().describe("detailed search query"),
     limit: z.number().optional().describe("Number of results to return"),

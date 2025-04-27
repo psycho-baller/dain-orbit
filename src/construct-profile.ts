@@ -5,7 +5,7 @@ import { CardUIBuilder } from "@dainprotocol/utils";
 export const generateDetailedProfileConfig: ToolConfig = {
   id: "generate-detailed-profile",
   name: "Generate Detailed User Profile",
-  description: "Generates a detailed markdown profile based on user input after the call with the user",
+  description: "Generates a detailed markdown profile based on user input after the call with the user. Invoke this tool after we have ended our phone call with the assistant. Curate the profile to be concise and engaging based on the user's background, interests, strengths, and weaknesses mentioned during the call.",
   input: z.object({
     name: z.string().describe("User's full name"),
     background: z.string().min(200).describe("Detailed background information about the user (at least 200 characters)"),
