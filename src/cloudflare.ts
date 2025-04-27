@@ -47,10 +47,13 @@ const VectorizeMatchSchema = z
     values: VectorizeVectorSchema.shape.values.optional(),
   });
 
+// Type derived from the Zod schema for a match result
+export type VectorizeMatch = z.infer<typeof VectorizeMatchSchema>;
+
 export const generateEmbeddingsConfig: ToolConfig = {
   id: "generate-embeddings",
   name: "Generate Embeddings",
-  description: "Generate embeddings from user profile details",
+  description: "Generate embeddings from user profile details after generating the profile based on the call",
   input: z.object({
     text: z.string().describe("User profile details in markdown format"),
   }),
@@ -64,18 +67,24 @@ export const generateEmbeddingsConfig: ToolConfig = {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      const matches = response.data.similarItems;
+      const matches = response.data.similarItems as VectorizeMatch[];
 
       const cardUI = new CardUIBuilder()
         .title("Embeddings Generated")
-        .content(`Generated ${matches.length} embeddings from the user profile`)
+        .content(`Found ${matches.length} users that might match well with you. Here are the details:
+          ${matches
+            .map(
+              (match) =>
+                `Name: ${match.metadata?.name}, Email: ${match.metadata?.email}`
+            )
+            .join("\n")}`)
         .build();
 
       return {
         text: `Successfully generated embeddings for the user profile`,
         data: matches,
         ui: cardUI,
-      };
+      } as { text: string; data: VectorizeMatch[]; ui: unknown }
     } catch (error) {
       console.error("Error generating embeddings:", error);
       throw new Error("Failed to generate embeddings");
