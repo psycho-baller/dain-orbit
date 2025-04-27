@@ -1,11 +1,7 @@
 import { VapiClient } from "@vapi-ai/server-sdk";
 import { z } from "zod";
-import {
-  defineDAINService,
-  ToolConfig,
-  ServiceContext
-} from "@dainprotocol/service-sdk";
-import { CardUIBuilder, AlertUIBuilder, DainResponse } from "@dainprotocol/utils";
+import { ToolConfig } from "@dainprotocol/service-sdk";
+import { CardUIBuilder, DainResponse } from "@dainprotocol/utils";
 import dotenv from "dotenv";
 import path from "path";
 dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
