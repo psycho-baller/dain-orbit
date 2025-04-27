@@ -60,7 +60,7 @@ export const generateEmbeddingsConfig: ToolConfig = {
     try {
       const response = await axios.post(
         "https://embeddings.ramim66809.workers.dev/",
-        { text },
+        { text, email: agentInfo.address },
         { headers: { "Content-Type": "application/json" } }
       );
 
