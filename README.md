@@ -8,7 +8,7 @@
 ## Inspiration
 
 As my team and I were brainstorming what problem we wanted to solve, we realized the biggest challenge we all face in university is not knowing who to talk to and not having the time to meet new people. So we thought — what if we could automate everything standing between people and their perfect circle? That’s where the idea of Orbit came to life.
-Whether you’re looking for a co-founder, a mentor, a mentee, a life partner, or simply a friend that can keep you accountable. We strongly believe if you’re able to easily control who you surround yourself with. Growth and change will come easy. And of course, as we all know in this day and age, it’s not about what you know, it’s about who you know.
+Whether you're looking for a co-founder, a mentor, a mentee, a life partner, or simply a friend that can keep you accountable. We strongly believe if you’re able to easily control who you surround yourself with. Growth and change will come easy. And of course, as we all know in this day and age, it’s not about what you know, it’s about who you know.
 So with that vision fueling and exciting us. We started imagining a world where Butterfly, your AI friend and personal assistant, knows everyone around you and is able to effortlessly connects you with the perfect person to meet.
 
 ## What it does
