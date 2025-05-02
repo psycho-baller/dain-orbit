@@ -9,7 +9,7 @@
 
 As my team and I were brainstorming what problem we wanted to solve, we realized the biggest challenge we all face in university is not knowing who to talk to and not having the time to meet new people. So we thought — what if we could automate everything standing between people and their perfect circle? That’s where the idea of Orbit came to life.
 Whether you're looking for a co-founder, a mentor, a mentee, a life partner, or simply a friend that can keep you accountable. We strongly believe if you’re able to easily control who you surround yourself with. Growth and change will come easy. And of course, as we all know in this day and age, it’s not about what you know, it’s about who you know.
-So with that vision fueling and exciting us. We started imagining a world where Butterfly, your AI friend and personal assistant, knows everyone around you and is able to effortlessly connects you with the perfect person to meet.
+So with that vision fueling and exciting us. We started imagining a world where Butterfly, your AI friend and personal assistant, knows everyone around you and is able to effortlessly connects you with the perfect person to meet. Orbit not only helps you find who is the best person to meet up with. But it also aleviates all the resistance and frustrations people feel when they try to meet up with new people. We have integrations with your LinkedIn, gmail, calendar and everything in between to help you schedule a meetup at the perfect time and place.
 
 ## What it does
 
@@ -28,7 +28,7 @@ After the email is confirmed, Orbit sends it out, coordinates schedules, and pro
 5. Output 3 - Small Talk Summary:
 Before the meeting, Orbit generates a "Things You Should Know About Each Other" guide. It highlights small talk topics, interesting overlaps, and deeper conversation starters based on both users' profiles — helping them skip the awkward beginnings and dive into meaningful discussions from the start.
 
-In short, Orbit removes the randomness and lack of intentionality from networking. It helps users find the right people, build real connections, and make the most out of every conversation.
+In short, Orbit removes the randomness and lack of intentionality from networking. It helps users find the right people, build real connections, and make the most out of every conversation. Orbit not only helps you find who is the best person to meet up with. But it also aleviates all the resistance and frustrations people feel when they try to meet up with new people. We have integrations with your LinkedIn, gmail, calendar and everything in between to help you schedule a meetup at the perfect time and place.
 
 ## How we built it
 
@@ -53,7 +53,7 @@ We're hoping to expand Orbit past its current horizons by adding even more integ
 
 ## Built With
 
-VAPI AI commences a phone call with the user to learn more about the user. Built on DAIN's vector database which stores the user's interests, weaknesses and strengths, Linkd's API scrapes Linkedin profiles to find personal similarities within profiles. Proxycurl, an email scraper, then finds work emails from these profiles to share to the user. Cloudflare maintains multimodal security for the program in case of potential security hazards. This all ends in an AI email generator, allowing for students to have a quick, warm and easy introduction to other people who have much in common with them.
+VAPI AI commences a phone call with the user to learn more about the user. Built on DAIN's agentic AI platform and Cloudflare's vector database which stores the user's details like interests, weaknesses and strengths, Linkd's API scrapes Linkedin profiles to find personal similarities within profiles. Proxycurl, an email scraper, then finds work emails from these profiles to share to the user. Cloudflare maintains multimodal security for the program in case of potential security hazards. This all ends in an AI email generator, allowing for students to have a quick, warm and easy introduction to other people who have much in common with them.
 
 - [VAPI](https://vapi.ai/)
 - [DAIN](https://dain.dev)
