@@ -2,12 +2,12 @@
 
 - Short intro on what Orbit is: <https://youtu.be/j6hW2_G6HCQ>
 - Demo of Orbit in action: <https://youtu.be/Ksm0Xa9MfkU>
-- Landing page: <https://v0-futuristic-coffee-website.vercel.app/>
 - Devpost submission: <https://devpost.com/software/orbit-w84iq1>
+- Landing page: <https://kzmkxr6j0t34au9p0tq0.lite.vusercontent.net>
 
 ## Inspiration
 
-As my team and I were brainstorming what problem we wanted to solve, we realized the biggest challenge we all face in university is not knowing who to talk to and not having the time to meet new people. So we thought — what if we could automate everything standing between people and their perfect circle? That’s where the idea of Orbit came to life.
+As my team and I were brainstorming what problem we wanted to solve, we realized the biggest challenge we all face in university is not knowing who to talk to and not having the time to meet new people. So we thought: what if we could automate everything standing between people and their perfect circle? That’s where the idea of Orbit came to life.
 Whether you're looking for a co-founder, a mentor, a mentee, a life partner, or simply a friend that can keep you accountable. We strongly believe if you’re able to easily control who you surround yourself with. Growth and change will come easy. And of course, as we all know in this day and age, it’s not about what you know, it’s about who you know.
 So with that vision fueling and exciting us. We started imagining a world where Butterfly, your AI friend and personal assistant, knows everyone around you and is able to effortlessly connects you with the perfect person to meet. Orbit not only helps you find who is the best person to meet up with. But it also aleviates all the resistance and frustrations people feel when they try to meet up with new people. We have integrations with your LinkedIn, gmail, calendar and everything in between to help you schedule a meetup at the perfect time and place.
 
